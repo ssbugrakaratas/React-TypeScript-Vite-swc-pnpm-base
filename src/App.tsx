@@ -1,5 +1,4 @@
-import Home from "./pages/Home"; // Eğer alias tanımlıysa
-import "./App.css";
+import Home from "@pages/Home";
 
 function App() {
   return (
