@@ -48,3 +48,63 @@ export default tseslint.config({
   },
 });
 ```
+
+<!-- my-app/
+│── src/
+│   ├── api/               # API çağrıları (axios, fetch vb.)
+│   │   ├── index.ts       # Genel API ayarları
+│   │   ├── userApi.ts     # Örnek API modülü
+│   │   ├── eventApi.ts    # Başka bir API modülü
+│   │
+│   ├── assets/            # Statik dosyalar (resimler, ikonlar, fontlar)
+│   │   ├── images/
+│   │   ├── icons/
+│   │   ├── fonts/
+│   │
+│   ├── components/        # UI Bileşenleri (button, card, modal vb.)
+│   │   ├── common/        # Genel bileşenler (Button, Input, Modal vb.)
+│   │   ├── layout/        # Sayfa düzeni bileşenleri (Header, Sidebar)
+│   │   ├── ui/            # Özel UI bileşenleri
+│   │   ├── index.ts       # Bileşenleri dışa aktarma
+│   │
+│   ├── config/            # Uygulama konfigürasyonları (env, constants vb.)
+│   │   ├── constants.ts   # Sabit değerler
+│   │   ├── routes.ts      # Route path’leri
+│   │
+│   ├── hooks/             # Özel React Hook'ları (custom hooks)
+│   │   ├── useAuth.ts     # Kullanıcı yetkilendirme hook'u
+│   │   ├── useFetch.ts    # API çağrıları için hook
+│   │
+│   ├── pages/             # Sayfa bileşenleri
+│   │   ├── Home/          # Home Page bileşeni
+│   │   ├── Login/         # Login Page bileşeni
+│   │   ├── Dashboard/     # Dashboard Page bileşeni
+│   │
+│   ├── services/          # İş mantığını yöneten servisler
+│   │   ├── authService.ts # Kullanıcı yetkilendirme servisi
+│   │   ├── eventService.ts# Etkinlik servisleri
+│   │
+│   ├── store/             # Global state yönetimi (Redux, Zustand vb.)
+│   │   ├── slices/        # Redux slice'ları
+│   │   ├── store.ts       # Store yapılandırması
+│   │
+│   ├── styles/            # Genel ve global stiller
+│   │   ├── globals.css    # Global CSS dosyası
+│   │   ├── theme.ts       # Tema ayarları (styled-components, tailwind vb.)
+│   │
+│   ├── types/             # TypeScript arayüzleri ve türleri
+│   │   ├── userTypes.ts   # Kullanıcı ile ilgili tipler
+│   │   ├── eventTypes.ts  # Event ile ilgili tipler
+│   │
+│   ├── utils/             # Yardımcı fonksiyonlar (dateFormatter, debounce vb.)
+│   │   ├── dateUtils.ts   # Tarih formatlama fonksiyonları
+│   │   ├── storage.ts     # LocalStorage ve SessionStorage yönetimi
+│   │
+│   ├── App.tsx            # Uygulamanın ana bileşeni
+│   ├── index.tsx          # React'in kök bileşeni
+│
+│── public/                 # HTML şablonu ve statik dosyalar
+│── .env                     # Çevresel değişkenler
+│── tsconfig.json             # TypeScript yapılandırması
+│── package.json              # Bağımlılıklar
+│── README.md                 # Proje açıklaması -->
