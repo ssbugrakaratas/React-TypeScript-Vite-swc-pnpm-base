@@ -3,22 +3,22 @@
 
 /* Varsayılan tema ayarları */
 :root {
-  --background: #ffffff;
+  --background: #e9f7fe;
   --foreground: #000000;
   --primary: #007bff;
   --secondary: #6c757d;
-  --accent: #ff4081;
+  --accent: #533ac2;
   --border-color: #dddddd;
   --shadow-color: rgba(0, 0, 0, 0.1);
 }
 
 /* Dark Mode Renkleri */
 [data-theme="dark"] {
-  --background: #121212;
+  --background: #202020;
   --foreground: #ffffff;
   --primary: #1e90ff;
   --secondary: #b0bec5;
-  --accent: #ff80ab;
+  --accent: #533ac2;
   --border-color: #333;
   --shadow-color: rgba(255, 255, 255, 0.1);
 }
