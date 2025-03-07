@@ -1,10 +1,13 @@
+import Layout from "@components/layout/Layout";
 import Home from "@pages/Home";
 
 function App() {
   return (
     <>
       <div>
-        <Home />
+        <Layout>
+          <Home />
+        </Layout>
       </div>
     </>
   );

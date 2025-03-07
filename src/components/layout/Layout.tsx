@@ -79,7 +79,15 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       </Drawer>
 
       {/* İçerik Alanı */}
-      <Box component="main">
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          p: 3,
+          transition: "margin-left 0.3s", // Sidebar açıldığında içerik alanı kayması animasyonu
+          marginLeft: open ? 0 : `${-drawerWidth}px`, // Sidebar açıkken içerik kayacak
+        }}
+      >
         <Toolbar />
         {children}
       </Box>
