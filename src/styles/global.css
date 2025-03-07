@@ -1,4 +1,5 @@
 /* 🌙 Dark Mode & ☀️ Light Mode - Global CSS */
+@import "tailwindcss";
 
 /* Varsayılan tema ayarları */
 :root {
