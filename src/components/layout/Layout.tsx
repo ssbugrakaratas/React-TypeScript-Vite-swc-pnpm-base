@@ -1,137 +1,164 @@
 import { useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
+  Box,
+  Drawer,
   AppBar,
   Toolbar,
-  IconButton,
-  Drawer,
   List,
+  Typography,
+  Divider,
+  IconButton,
   ListItem,
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  Typography,
-  Box,
-  Button,
+  useTheme,
 } from "@mui/material";
-import { Menu, Home, Dashboard, Settings, Logout } from "@mui/icons-material";
-import ThemeToggle from "./ThemeToggle"; // Theme Toggle bileşeni eklendi
+import { Menu as MenuIcon, ChevronLeft as ChevronLeftIcon } from "@mui/icons-material";
+import { routes, adminRoutes, RouteConfig } from "@config/routes";
+import { useAuth } from "@services/authService";
 
 const drawerWidth = 240;
-const miniDrawerWidth = 65;
 
-const Layout = ({ children }: { children: React.ReactNode }) => {
-  const [open, setOpen] = useState(true); // Sidebar varsayılan olarak açık
+export default function Layout({ children }: { children: React.ReactNode }) {
+  const [open, setOpen] = useState(true);
+  const theme = useTheme();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { user } = useAuth();
 
-  const handleLogout = () => {
-    console.log("Logout clicked!"); // Buraya çıkış işlemini ekleyebilirsin
+  const handleDrawerOpen = () => {
+    setOpen(true);
   };
+
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
+
+  const renderMenuItem = (route: RouteConfig) => {
+    const isSelected = location.pathname === `/tr-TR/${route.path}`;
+    return (
+      <ListItem key={route.path} disablePadding>
+        <ListItemButton
+          selected={isSelected}
+          onClick={() => navigate(`/tr-TR/${route.path}`)}
+          sx={{
+            minHeight: 48,
+            justifyContent: open ? "initial" : "center",
+            px: 2.5,
+            "&.Mui-selected": {
+              backgroundColor: theme.palette.primary.main,
+              color: theme.palette.primary.contrastText,
+              "&:hover": {
+                backgroundColor: theme.palette.primary.dark,
+              },
+            },
+          }}
+        >
+          <ListItemIcon
+            sx={{
+              minWidth: 0,
+              mr: open ? 3 : "auto",
+              justifyContent: "center",
+              color: isSelected ? theme.palette.primary.contrastText : "inherit",
+            }}
+          >
+            {route.icon}
+          </ListItemIcon>
+          <ListItemText
+            primary={route.text}
+            sx={{
+              opacity: open ? 1 : 0,
+              color: isSelected ? theme.palette.primary.contrastText : "inherit",
+            }}
+          />
+        </ListItemButton>
+      </ListItem>
+    );
+  };
+
+  const currentRoute = routes.find((route: RouteConfig) => location.pathname === `/tr-TR/${route.path}`);
+  const currentAdminRoute = adminRoutes.find(
+    (route: RouteConfig) => location.pathname === `/tr-TR/Admin/${route.path}`,
+  );
+  const pageTitle = currentRoute?.text || currentAdminRoute?.text || "Ana Sayfa";
 
   return (
     <Box sx={{ display: "flex" }}>
-      {/* App Bar */}
-      <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
+      <AppBar
+        position="fixed"
+        sx={{
+          zIndex: theme.zIndex.drawer + 1,
+          transition: theme.transitions.create(["width", "margin"], {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.leavingScreen,
+          }),
+        }}
+      >
         <Toolbar>
-          {/* Menü Butonu */}
-          <IconButton edge="start" color="inherit" onClick={() => setOpen(!open)}>
-            <Menu />
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            onClick={handleDrawerOpen}
+            edge="start"
+            sx={{
+              marginRight: 5,
+              ...(open && { display: "none" }),
+            }}
+          >
+            <MenuIcon />
           </IconButton>
-
-          {/* Başlık */}
-          <Typography variant="h6" noWrap sx={{ flexGrow: 1, ml: 2 }}>
-            My App
+          <Typography variant="h6" noWrap component="div">
+            {pageTitle}
           </Typography>
-
-          {/* Tema Değiştirici */}
-          <ThemeToggle />
-
-          {/* Çıkış Butonu */}
-          <Button color="inherit" startIcon={<Logout />} onClick={handleLogout}>
-            Logout
-          </Button>
         </Toolbar>
       </AppBar>
-
-      {/* Sidebar */}
       <Drawer
-        variant="permanent"
         sx={{
-          width: open ? drawerWidth : miniDrawerWidth,
+          width: drawerWidth,
           flexShrink: 0,
           "& .MuiDrawer-paper": {
-            width: open ? drawerWidth : miniDrawerWidth,
+            width: drawerWidth,
             boxSizing: "border-box",
-            transition: "all 0.3s ease-in-out",
-            overflowX: "hidden",
-            borderRight: "none",
-            boxShadow: "0 0 10px rgba(0,0,0,0.1)",
-            transform: open ? "translateX(0)" : "translateX(0)",
+            transition: theme.transitions.create("width", {
+              easing: theme.transitions.easing.sharp,
+              duration: theme.transitions.duration.enteringScreen,
+            }),
+            ...(!open && {
+              width: theme.spacing(7),
+              overflowX: "hidden",
+              transition: theme.transitions.create("width", {
+                easing: theme.transitions.easing.sharp,
+                duration: theme.transitions.duration.leavingScreen,
+              }),
+            }),
           },
         }}
+        variant="permanent"
+        open={open}
       >
         <Toolbar />
-        <List>
-          {[
-            { text: "Home", icon: <Home /> },
-            { text: "Dashboard", icon: <Dashboard /> },
-            { text: "Settings", icon: <Settings /> },
-          ].map(({ text, icon }) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon
-                  sx={{
-                    minWidth: open ? 36 : 0,
-                    justifyContent: "center",
-                    transition: "all 0.3s ease-in-out",
-                    opacity: open ? 1 : 0.7,
-                    transform: open ? "scale(1)" : "scale(0.9)",
-                  }}
-                >
-                  {icon}
-                </ListItemIcon>
-                <ListItemText
-                  primary={text}
-                  sx={{
-                    opacity: open ? 1 : 0,
-                    transition: "opacity 0.3s ease-in-out",
-                    whiteSpace: "nowrap",
-                  }}
-                />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
+        <Box sx={{ overflow: "auto" }}>
+          <IconButton onClick={handleDrawerClose}>
+            <ChevronLeftIcon />
+          </IconButton>
+          <Divider />
+          <List>
+            {routes.map(renderMenuItem)}
+            {user.role === "admin" && (
+              <>
+                <Divider />
+                {adminRoutes.map(renderMenuItem)}
+              </>
+            )}
+          </List>
+        </Box>
       </Drawer>
-
-      {/* İçerik Alanı */}
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          p: 2,
-          transition: "all 0.3s ease-in-out",
-          backgroundColor: "background.default",
-          minHeight: "100vh",
-          width: `calc(100% - ${open ? drawerWidth : miniDrawerWidth}px)`,
-          transform: open ? "translateX(0)" : `translateX(0)`,
-          position: "relative",
-          "&::before": {
-            content: '""',
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: "background.default",
-            transition: "all 0.3s ease-in-out",
-            zIndex: -1,
-          },
-        }}
-      >
+      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <Toolbar />
         {children}
       </Box>
     </Box>
   );
-};
-
-export default Layout;
+}
