@@ -17,6 +17,7 @@ import { Menu, Home, Dashboard, Settings, Logout } from "@mui/icons-material";
 import ThemeToggle from "./ThemeToggle"; // Theme Toggle bileşeni eklendi
 
 const drawerWidth = 240;
+const miniDrawerWidth = 65;
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const [open, setOpen] = useState(true); // Sidebar varsayılan olarak açık
@@ -52,13 +53,19 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 
       {/* Sidebar */}
       <Drawer
-        variant="persistent"
-        anchor="left"
-        open={open}
+        variant="permanent"
         sx={{
-          width: drawerWidth,
+          width: open ? drawerWidth : miniDrawerWidth,
           flexShrink: 0,
-          [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: "border-box" },
+          "& .MuiDrawer-paper": {
+            width: open ? drawerWidth : miniDrawerWidth,
+            boxSizing: "border-box",
+            transition: "all 0.3s ease-in-out",
+            overflowX: "hidden",
+            borderRight: "none",
+            boxShadow: "0 0 10px rgba(0,0,0,0.1)",
+            transform: open ? "translateX(0)" : "translateX(0)",
+          },
         }}
       >
         <Toolbar />
@@ -70,8 +77,25 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           ].map(({ text, icon }) => (
             <ListItem key={text} disablePadding>
               <ListItemButton>
-                <ListItemIcon>{icon}</ListItemIcon>
-                <ListItemText primary={text} />
+                <ListItemIcon
+                  sx={{
+                    minWidth: open ? 36 : 0,
+                    justifyContent: "center",
+                    transition: "all 0.3s ease-in-out",
+                    opacity: open ? 1 : 0.7,
+                    transform: open ? "scale(1)" : "scale(0.9)",
+                  }}
+                >
+                  {icon}
+                </ListItemIcon>
+                <ListItemText
+                  primary={text}
+                  sx={{
+                    opacity: open ? 1 : 0,
+                    transition: "opacity 0.3s ease-in-out",
+                    whiteSpace: "nowrap",
+                  }}
+                />
               </ListItemButton>
             </ListItem>
           ))}
@@ -83,9 +107,24 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         component="main"
         sx={{
           flexGrow: 1,
-          p: 3,
-          transition: "margin-left 0.3s", // Sidebar açıldığında içerik alanı kayması animasyonu
-          marginLeft: open ? 0 : `${-drawerWidth}px`, // Sidebar açıkken içerik kayacak
+          p: 2,
+          transition: "all 0.3s ease-in-out",
+          backgroundColor: "background.default",
+          minHeight: "100vh",
+          width: `calc(100% - ${open ? drawerWidth : miniDrawerWidth}px)`,
+          transform: open ? "translateX(0)" : `translateX(0)`,
+          position: "relative",
+          "&::before": {
+            content: '""',
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: "background.default",
+            transition: "all 0.3s ease-in-out",
+            zIndex: -1,
+          },
         }}
       >
         <Toolbar />

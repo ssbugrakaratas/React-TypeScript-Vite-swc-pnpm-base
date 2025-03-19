@@ -1,23 +1,15 @@
-import { useEffect, useState } from "react";
-import { toggleTheme, applySavedTheme } from "@styles/theme";
+import { IconButton } from "@mui/material";
+import Brightness4Icon from "@mui/icons-material/Brightness4";
+import Brightness7Icon from "@mui/icons-material/Brightness7";
+import { useTheme } from "@context/ThemeContext";
 
 function ThemeToggle() {
-  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
-
-  useEffect(() => {
-    applySavedTheme();
-    setTheme(localStorage.getItem("theme") || "light");
-  }, []);
-
-  const handleClick = () => {
-    toggleTheme();
-    setTheme(localStorage.getItem("theme") || "light");
-  };
+  const { theme, toggleTheme } = useTheme();
 
   return (
-    <button onClick={handleClick} className="theme-toggle">
-      {theme === "dark" ? "🌞 Light Mode" : "🌙 Dark Mode"}
-    </button>
+    <IconButton onClick={toggleTheme} color="inherit">
+      {theme === "dark" ? <Brightness7Icon /> : <Brightness4Icon />}
+    </IconButton>
   );
 }
 

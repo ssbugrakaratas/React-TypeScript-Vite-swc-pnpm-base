@@ -1,5 +1,9 @@
 import { BrowserRouter as Router, Route, Navigate, Routes, Outlet } from "react-router-dom";
 import Layout from "@components/layout/Layout";
+import { ThemeProvider as MuiThemeProvider } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
+import { getMuiTheme } from "@styles/theme";
+import { ThemeProvider, useTheme } from "@context/ThemeContext";
 
 // Genel sayfalar
 import Home from "@pages/Home";
@@ -8,7 +12,9 @@ import Home from "@pages/Home";
 import ApplicationSearch from "@pages/Home";
 import { useAuth } from "@services/authService";
 
-function App() {
+function AppContent() {
+  const { theme } = useTheme();
+
   const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const { isAuthenticated } = useAuth();
 
@@ -30,46 +36,57 @@ function App() {
   };
 
   return (
-    <Router>
-      <Routes>
-        {/* Varsayılan dil yönlendirmesi */}
-        <Route path="/" element={<Navigate to={`tr-TR/Login`} replace />} />
+    <MuiThemeProvider theme={getMuiTheme(theme)}>
+      <CssBaseline />
+      <Router>
+        <Routes>
+          {/* Varsayılan dil yönlendirmesi */}
+          <Route path="/" element={<Navigate to={`tr-TR/Login`} replace />} />
 
-        {/* Dil bazlı yollar */}
-        <Route path="tr-TR/*">
-          {/* Genel sayfalar */}
-          <Route path="Login" element={<Home />} />
+          {/* Dil bazlı yollar */}
+          <Route path="tr-TR/*">
+            {/* Genel sayfalar */}
+            <Route path="Login" element={<Home />} />
 
-          {/* Giriş yapmış kullanıcılar için korunan sayfalar */}
-          <Route
-            path="Home"
-            element={
-              <ProtectedRoute>
-                <Layout>
-                  <Home />
-                </Layout>
-              </ProtectedRoute>
-            }
-          />
+            {/* Giriş yapmış kullanıcılar için korunan sayfalar */}
+            <Route
+              path="Home"
+              element={
+                <ProtectedRoute>
+                  <Layout>
+                    <Home />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
 
-          <Route
-            path="ApplicationSearch"
-            element={
-              <ProtectedRoute>
-                <Layout>
-                  <ApplicationSearch />
-                </Layout>
-              </ProtectedRoute>
-            }
-          />
+            <Route
+              path="ApplicationSearch"
+              element={
+                <ProtectedRoute>
+                  <Layout>
+                    <ApplicationSearch />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
 
-          {/* Admin sayfaları */}
-          <Route path="Admin/*" element={<AdminRoute redirectTo={`/Login`} />}>
-            <Route path="Home" element={<Home />} />
+            {/* Admin sayfaları */}
+            <Route path="Admin/*" element={<AdminRoute redirectTo={`/Login`} />}>
+              <Route path="Home" element={<Home />} />
+            </Route>
           </Route>
-        </Route>
-      </Routes>
-    </Router>
+        </Routes>
+      </Router>
+    </MuiThemeProvider>
+  );
+}
+
+function App() {
+  return (
+    <ThemeProvider>
+      <AppContent />
+    </ThemeProvider>
   );
 }
 
