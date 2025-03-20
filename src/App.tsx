@@ -4,7 +4,7 @@ import { ThemeProvider as MuiThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { getMuiTheme } from "@styles/theme";
 import { ThemeProvider, useTheme } from "@context/ThemeContext";
-import { routes, adminRoutes } from "@config/routes";
+import { routes, adminRoutes, RouteConfig } from "@config/routes";
 import ProtectedRoute from "@components/auth/ProtectedRoute";
 import AdminRoute from "@components/auth/AdminRoute";
 
@@ -14,7 +14,7 @@ import Login from "@pages/Login";
 function AppContent() {
   const { theme } = useTheme();
 
-  const renderRoute = (route: (typeof routes)[0], isAdmin = false) => {
+  const renderRoute = (route: RouteConfig, isAdmin = false) => {
     const RouteComponent = isAdmin ? AdminRoute : ProtectedRoute;
     const Element = route.element;
     return (

@@ -3,6 +3,12 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { Box, Button, Container, TextField, Typography, Paper, Alert } from "@mui/material";
 import { useAuth } from "@services/authService";
 
+interface LocationState {
+  from?: {
+    pathname: string;
+  };
+}
+
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -11,7 +17,7 @@ export default function Login() {
   const location = useLocation();
   const { login, isAuthenticated } = useAuth();
 
-  const from = (location.state as any)?.from?.pathname || "/tr-TR/Home";
+  const from = (location.state as LocationState)?.from?.pathname || "/tr-TR/Home";
 
   useEffect(() => {
     if (isAuthenticated) {

@@ -3,6 +3,7 @@ import HomePage from "@pages/Home";
 import DashboardPage from "@pages/Dashboard";
 import SettingsPage from "@pages/Settings";
 import { ReactNode } from "react";
+import AdminHome from "@pages/admin/AdminHome";
 
 export interface RouteConfig {
   path: string;
@@ -35,8 +36,8 @@ export const routes: RouteConfig[] = [
 
 export const adminRoutes: RouteConfig[] = [
   {
-    path: "Home",
-    element: HomePage,
+    path: "Admin/Home",
+    element: AdminHome,
     text: "Admin Ana Sayfa",
     icon: <Home />,
     isAdmin: true,
