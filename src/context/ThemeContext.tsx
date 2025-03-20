@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import { getMuiTheme, applySavedTheme, toggleTheme } from "@styles/theme";
+import { applySavedTheme, toggleTheme } from "@styles/theme";
 
 type ThemeContextType = {
   theme: "light" | "dark";
