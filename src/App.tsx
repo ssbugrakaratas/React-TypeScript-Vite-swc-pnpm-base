@@ -49,7 +49,7 @@ function AppContent() {
             {routes.map((route) => renderRoute(route))}
 
             {/* Admin Sayfaları */}
-            <Route path="Admin">{adminRoutes.map((route) => renderRoute(route, true))}</Route>
+            {adminRoutes.map((route) => renderRoute(route, true))}
           </Route>
         </Routes>
       </Router>
