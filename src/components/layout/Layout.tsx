@@ -16,7 +16,7 @@ import {
   useTheme,
   Button,
 } from "@mui/material";
-import { Menu as MenuIcon, ChevronLeft as ChevronLeftIcon, Logout } from "@mui/icons-material";
+import { Menu as MenuIcon, Logout } from "@mui/icons-material";
 import { routes, adminRoutes, RouteConfig } from "@config/routes";
 import { useAuth } from "@services/authService";
 import ThemeToggle from "./ThemeToggle";
@@ -28,7 +28,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const theme = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
 
   const handleDrawer = () => {
     if (open) {
@@ -36,6 +36,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     } else {
       setOpen(true);
     }
+  };
+
+  const handleLogout = () => {
+    logout();
+    navigate("/tr-TR/Login");
   };
 
   const renderMenuItem = (route: RouteConfig) => {
@@ -114,7 +119,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             {pageTitle}
           </Typography>
           <ThemeToggle />
-          <Button color="inherit" startIcon={<Logout />} onClick={() => console.log("Logout clicked!")}>
+          <Button color="inherit" startIcon={<Logout />} onClick={handleLogout}>
             Çıkış Yap
           </Button>
         </Toolbar>
@@ -147,7 +152,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <Box sx={{ overflow: "auto" }}>
           <List>
             {routes.map(renderMenuItem)}
-            {user.role === "admin" && (
+            {user?.role === "admin" && (
               <>
                 <Divider />
                 {adminRoutes.map(renderMenuItem)}

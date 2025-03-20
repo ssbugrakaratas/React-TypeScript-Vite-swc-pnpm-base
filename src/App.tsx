@@ -1,39 +1,20 @@
-import { BrowserRouter as Router, Route, Navigate, Routes, Outlet } from "react-router-dom";
+import { BrowserRouter as Router, Route, Navigate, Routes } from "react-router-dom";
 import Layout from "@components/layout/Layout";
 import { ThemeProvider as MuiThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { getMuiTheme } from "@styles/theme";
 import { ThemeProvider, useTheme } from "@context/ThemeContext";
-import { routes, adminRoutes, RouteConfig } from "@config/routes";
-import { useAuth } from "@services/authService";
+import { routes, adminRoutes } from "@config/routes";
+import ProtectedRoute from "@components/auth/ProtectedRoute";
+import AdminRoute from "@components/auth/AdminRoute";
 
 // Genel sayfalar
-import Home from "@pages/Home";
+import Login from "@pages/Login";
 
 function AppContent() {
   const { theme } = useTheme();
 
-  const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const { isAuthenticated } = useAuth();
-
-    if (!isAuthenticated) {
-      return <Navigate to="/tr-TR/Login" replace />;
-    }
-
-    return <>{children}</>;
-  };
-
-  const AdminRoute: React.FC<{ redirectTo?: string }> = ({ redirectTo = "/tr-TR/Login" }) => {
-    const { isAuthenticated, user } = useAuth();
-
-    if (!isAuthenticated || user.role !== "admin") {
-      return <Navigate to={redirectTo} replace />;
-    }
-
-    return <Outlet />;
-  };
-
-  const renderRoute = (route: RouteConfig, isAdmin = false) => {
+  const renderRoute = (route: (typeof routes)[0], isAdmin = false) => {
     const RouteComponent = isAdmin ? AdminRoute : ProtectedRoute;
     const Element = route.element;
     return (
@@ -62,7 +43,7 @@ function AppContent() {
           {/* Dil bazlı yollar */}
           <Route path="tr-TR">
             {/* Genel sayfalar */}
-            <Route path="Login" element={<Home />} />
+            <Route path="Login" element={<Login />} />
 
             {/* Normal Kullanıcı Sayfaları */}
             {routes.map((route) => renderRoute(route))}
