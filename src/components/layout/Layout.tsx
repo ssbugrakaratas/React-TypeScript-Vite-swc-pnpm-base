@@ -14,10 +14,12 @@ import {
   ListItemIcon,
   ListItemText,
   useTheme,
+  Button,
 } from "@mui/material";
-import { Menu as MenuIcon, ChevronLeft as ChevronLeftIcon } from "@mui/icons-material";
+import { Menu as MenuIcon, ChevronLeft as ChevronLeftIcon, Logout } from "@mui/icons-material";
 import { routes, adminRoutes, RouteConfig } from "@config/routes";
 import { useAuth } from "@services/authService";
+import ThemeToggle from "./ThemeToggle";
 
 const drawerWidth = 240;
 
@@ -28,12 +30,12 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const location = useLocation();
   const { user } = useAuth();
 
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-
-  const handleDrawerClose = () => {
-    setOpen(false);
+  const handleDrawer = () => {
+    if (open) {
+      setOpen(false);
+    } else {
+      setOpen(true);
+    }
   };
 
   const renderMenuItem = (route: RouteConfig) => {
@@ -100,18 +102,21 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <IconButton
             color="inherit"
             aria-label="open drawer"
-            onClick={handleDrawerOpen}
+            onClick={handleDrawer}
             edge="start"
             sx={{
               marginRight: 5,
-              ...(open && { display: "none" }),
             }}
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
+          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
             {pageTitle}
           </Typography>
+          <ThemeToggle />
+          <Button color="inherit" startIcon={<Logout />} onClick={() => console.log("Logout clicked!")}>
+            Çıkış Yap
+          </Button>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -140,10 +145,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       >
         <Toolbar />
         <Box sx={{ overflow: "auto" }}>
-          <IconButton onClick={handleDrawerClose}>
-            <ChevronLeftIcon />
-          </IconButton>
-          <Divider />
           <List>
             {routes.map(renderMenuItem)}
             {user.role === "admin" && (
@@ -155,7 +156,19 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           </List>
         </Box>
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          p: 3,
+          width: `calc(100% - ${open ? drawerWidth : theme.spacing(7)}px)`,
+          transition: theme.transitions.create(["width", "margin"], {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.leavingScreen,
+          }),
+          marginLeft: open ? 0 : `-${drawerWidth - parseInt(theme.spacing(7))}px`,
+        }}
+      >
         <Toolbar />
         {children}
       </Box>
